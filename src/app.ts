@@ -4,13 +4,11 @@ import express from 'express';
 import http from 'http';
 import cors from 'cors';
 import multer from 'multer';
+import nodemailer from 'nodemailer'
+var path = require('path');
+require('dotenv').config();
 
-/**
- * TODO:
- * Host my own peer server with
- *      npm install -g peer
- *      peerjs --port {PORT}
- */
+import { uploadNotification } from "./firebaseWrappers/firebaseFirestore";
 
 const app = (module.exports = express());
 const server: http.Server = http.createServer(app);
@@ -21,11 +19,13 @@ const port = 8080;
 app.use(express.json());
 app.use(cors({origin: "*"}));
 
-const upload = multer();
-const type = upload.single('streamImage'); // Whatever this is, I dont like it
+// const upload = multer();
+// const type = upload.single('streamImage'); 
+
+console.log(process.env.PASSWORD);
+
 
 app.get('/', (request, response) => {
-    // res.redirect(`/${nanoid()}`);
     response.status(200).send({
         message: "Hello there",
         general: "kenobi",
@@ -33,23 +33,27 @@ app.get('/', (request, response) => {
         again: "extra",
         NoMore: "Refresh and reload"
     });
+    // response.sendFile(path.join(__dirname + '/../public/index.html'));
 });
 
-app.get('/testing', (req, res) => {
-    res.status(200).send('Hello, world!')
-})
-
-app.post('/streamCreation', type, (request, response) => {
-    // console.log("recieved a thing from a frontend");
-    // const { general } = request.body;
-
-    console.log(request.body);
-    if (request.file) {
-        console.log(request.file);
+app.post("/contactMe", (request, response) => {
+    
+    const notification = request.body;
+    const data = {
+        email: notification.email,
+        name: notification.name,
+        company: notification.company,
+        message: notification.message,
     }
+    console.log(data);
+
+    uploadNotification(data);
+
     response.status(200).send({
-        time: 'to get data',
-    })
+        message: "Success",
+    });
+
+
 })
 
 server.listen(port, () => {
