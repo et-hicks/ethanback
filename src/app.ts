@@ -1,6 +1,6 @@
   
 // ----------------------- Libraries -----------------------
-import express from 'express';
+import express, { response } from 'express';
 import http from 'http';
 import cors from 'cors';
 import multer from 'multer';
@@ -8,7 +8,8 @@ import nodemailer from 'nodemailer'
 var path = require('path');
 require('dotenv').config();
 
-import { uploadNotification } from "./firebaseWrappers/firebaseFirestore";
+import { uploadNotification, getPuzzle } from "./firebaseWrappers/firebaseFirestore";
+import { getRandomInt } from "./Utils/appUtils";
 
 const app = (module.exports = express());
 const server: http.Server = http.createServer(app);
@@ -52,9 +53,18 @@ app.post("/contactMe", (request, response) => {
     response.status(200).send({
         message: "Success",
     });
+});
 
+app.get("/sudoku-puzzle", async (request, response) => {
+    const puzzle = getRandomInt(300);
+    const puzzleData = await getPuzzle(puzzle);
 
+    response.status(200).send({
+        puzzle: puzzleData.puzzle,
+        solution: puzzleData.solution,
+    })
 })
+
 
 server.listen(port, () => {
     // console.log(`model.id = ${nanoid()}`);

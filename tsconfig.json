@@ -27,7 +27,8 @@
         "src/app.ts",
         "config/*.ts",
         "models/*.ts",
-        "routings/**/*.ts"
+        "routings/**/*.ts",
+        "@types",
     ],
     "exclude": [
         "node_modules"
