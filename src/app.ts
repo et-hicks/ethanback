@@ -58,11 +58,8 @@ app.post("/contactMe", (request, response) => {
 app.get("/sudoku-puzzle", async (request, response) => {
     const puzzle = getRandomInt(300);
     const puzzleData = await getPuzzle(puzzle);
-
-    response.status(200).send({
-        puzzle: puzzleData.puzzle,
-        solution: puzzleData.solution,
-    })
+    console.log(puzzleData);
+    response.status(200).send(puzzleData)
 })
 
 
