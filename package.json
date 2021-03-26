@@ -8,7 +8,8 @@
     "startLocal": "nodemon",
     "startDev": "nodemon src/app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc -p tsconfig.release.json"
+    "build": "tsc -p tsconfig.release.json",
+    "deploy": "npm run build && gcloud app deploy"
   },
   "author": "ethan hicks",
   "license": "ISC",
