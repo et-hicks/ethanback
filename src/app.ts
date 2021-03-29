@@ -10,6 +10,7 @@ require('dotenv').config();
 
 import { uploadNotification, getPuzzle } from "./firebaseWrappers/firebaseFirestore";
 import { getRandomInt } from "./Utils/appUtils";
+import { setUpSocketIOServer } from './Socketry/socketry';
 
 const app = (module.exports = express());
 const server: http.Server = http.createServer(app);
@@ -23,8 +24,7 @@ app.use(cors({origin: "*"}));
 // const upload = multer();
 // const type = upload.single('streamImage'); 
 
-console.log(process.env.PASSWORD);
-
+setUpSocketIOServer(server);
 
 app.get('/', (request, response) => {
     response.status(200).send({
